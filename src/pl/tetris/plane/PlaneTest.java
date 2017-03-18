@@ -5,6 +5,7 @@ import org.junit.Test;
 import pl.tetris.blocks.Block;
 import pl.tetris.blocks.Square;
 import pl.tetris.blocks.SquareBlock;
+import pl.tetris.blocks.TowerBlock;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -21,24 +22,63 @@ public class PlaneTest {
     }
 
     @Test
-    public void getPlane() throws Exception {
-        Plane plane = new Plane(10,30);
-        assertArrayEquals("Failure initializing the plane - Square arrays not same", squarePlane, plane.getPlane());
-    }
-
-    @Test
     public void addSquareBlock() throws Exception {
-
         squarePlane[0][4] = Square.BLUE;
         squarePlane[0][5] = Square.BLUE;
         squarePlane[1][4] = Square.BLUE;
         squarePlane[1][5] = Square.BLUE;
 
         Plane plane = new Plane(10, 30);
+        Block block = new SquareBlock(Square.BLUE, 2);
+        plane.addBlock(block);
+
+        assertArrayEquals("Failure adding Square Block - Square arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void moveSquareBlockDown() throws Exception {
+        squarePlane[1][4] = Square.BLUE;
+        squarePlane[1][5] = Square.BLUE;
+        squarePlane[2][4] = Square.BLUE;
+        squarePlane[2][5] = Square.BLUE;
+
+        Plane plane = new Plane(10, 30);
         Block square = new SquareBlock(Square.BLUE, 2);
         plane.addBlock(square);
 
-        assertArrayEquals("Failure adding Square Block - Square arrays not the same", squarePlane, plane.getPlane());
+        plane.moveBlockDown();
+
+        assertArrayEquals("Failure moving Block - Square arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void addTowerBlock() throws Exception {
+        squarePlane[0][5] = Square.GREEN;
+        squarePlane[1][5] = Square.GREEN;
+        squarePlane[2][5] = Square.GREEN;
+        squarePlane[3][5] = Square.GREEN;
+
+        Plane plane = new Plane(10,30);
+        Block block = new TowerBlock(Square.GREEN, 4);
+        plane.addBlock(block);
+
+        assertArrayEquals("Failure adding Tower Block - Square arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void moveTowerBlockDown() throws Exception {
+        squarePlane[1][5] = Square.GREEN;
+        squarePlane[2][5] = Square.GREEN;
+        squarePlane[3][5] = Square.GREEN;
+        squarePlane[4][5] = Square.GREEN;
+
+        Plane plane = new Plane(10, 30);
+        Block block = new TowerBlock(Square.GREEN, 4);
+        plane.addBlock(block);
+
+        plane.moveBlockDown();
+
+        assertArrayEquals("Failure moving Block - Tower arrays not the same", squarePlane, plane.getPlane());
     }
 
 }
