@@ -1,8 +1,13 @@
 package pl.tetris;
 
+import pl.tetris.plane.Plane;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+
+        Plane plane = new Plane(5, 10);
+
+        System.out.println(plane);
     }
 }
