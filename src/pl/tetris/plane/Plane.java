@@ -22,20 +22,24 @@ public class Plane {
         return tetrisArray;
     }
 
-    public void moveBlockDown() {
-        //Clear previous blocks
+    public void moveBlock(int horizontal, int vertical) {
+        Square shape[][] = block.getShape();
+
+        cleanBlock();
+
+        coords[0] += horizontal;
+        coords[1] += vertical;
+
+        for(int i=0; i < shape.length; i++)
+            System.arraycopy(shape[i], 0, tetrisArray[coords[1] + i], coords[0], shape[i].length);
+    }
+
+    private void cleanBlock() {
         Square shape[][] = block.getShape();
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++)
                 tetrisArray[coords[1] + i][coords[0] + j] = Square.BLANK;
-
-
-        //Move block
-        coords[1] += 1;
-        for(int i=0; i < shape.length; i++)
-            System.arraycopy(shape[i], 0, tetrisArray[coords[1] + i], coords[0], shape[i].length);
-
     }
 
     public void addBlock(Block block) {

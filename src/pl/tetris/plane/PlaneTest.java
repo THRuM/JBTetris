@@ -46,7 +46,7 @@ public class PlaneTest {
         Block square = new SquareBlock(Square.BLUE, 2);
         plane.addBlock(square);
 
-        plane.moveBlockDown();
+        plane.moveBlock(0, 1);
 
         assertArrayEquals("Failure moving Block - Square arrays not the same", squarePlane, plane.getPlane());
     }
@@ -76,9 +76,41 @@ public class PlaneTest {
         Block block = new TowerBlock(Square.GREEN, 4);
         plane.addBlock(block);
 
-        plane.moveBlockDown();
+        plane.moveBlock(0, 1);
 
         assertArrayEquals("Failure moving Block - Tower arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void moveSquareBlockRight() throws Exception {
+        squarePlane[0][5] = Square.BLUE;
+        squarePlane[0][6] = Square.BLUE;
+        squarePlane[1][5] = Square.BLUE;
+        squarePlane[1][6] = Square.BLUE;
+
+        Plane plane = new Plane(10, 30);
+        Block block = new SquareBlock(Square.BLUE, 2);
+        plane.addBlock(block);
+
+        plane.moveBlock(1, 0);
+
+        assertArrayEquals("Failure moving Block - Square to right arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void moveSquareBlockLeft() throws Exception {
+        squarePlane[0][3] = Square.BLUE;
+        squarePlane[0][4] = Square.BLUE;
+        squarePlane[1][3] = Square.BLUE;
+        squarePlane[1][4] = Square.BLUE;
+
+        Plane plane = new Plane(10, 30);
+        Block block = new SquareBlock(Square.BLUE, 2);
+        plane.addBlock(block);
+
+        plane.moveBlock(-1, 0);
+
+        assertArrayEquals("Failure moving Block - Square to left arrays not the same", squarePlane, plane.getPlane());
     }
 
 }
