@@ -5,13 +5,13 @@ public class SquareBlock implements Block {
     private Square shape[][];
     private Square backupShape[][];
 
-    public SquareBlock(Square color){
-        shape = new Square[2][2];
+    public SquareBlock(Square color, int size){
+        shape = new Square[size][size];
         backupShape = null;
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++)
-                shape[i][j] = Square.BLUE;
+                shape[i][j] = color;
     }
 
     @Override

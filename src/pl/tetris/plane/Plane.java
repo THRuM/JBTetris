@@ -16,20 +16,31 @@ public class Plane {
             }
     }
 
-    public Square[][] getPlane(){
+    Square[][] getPlane(){
         return tetrisArray;
     }
 
-    public String toString(){
-        String rep = "";
+    public void addBlock(Block block) {
+        Square shapeToAdd[][] = block.getShape();
+        this.block = block;
 
+        int x = (tetrisArray[0].length / 2) - (shapeToAdd[0].length / 2);
+
+        for(int i=0; i < shapeToAdd.length; i++){
+            System.arraycopy(shapeToAdd[i], 0, tetrisArray[i], x, shapeToAdd[i].length);
+        }
+    }
+
+    public String toString(){
+        StringBuilder repB = new StringBuilder();
         for(Square row[] : tetrisArray) {
             for (Square element : row) {
-                rep += element;
+                repB.append(element);
+                repB.append(' ');
             }
-            rep += '\n';
+            repB.append('\n');
         }
 
-        return rep;
+        return repB.toString();
     }
 }
