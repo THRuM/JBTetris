@@ -9,7 +9,11 @@ public class SBlock implements Block {
         shape = new Square[2][weight];
         backupShape = null;
 
-        for(int i = 0; i < shape[0].length/2; i++)
+        for(int i=0; i < shape.length; i++)
+            for(int j=0; j < shape[i].length; j++)
+                shape[i][j] = Square.BLANK;
+
+        for(int i = 0; i <= shape[0].length/2; i++)
             shape[0][i] = color;
         for(int i = shape[1].length/2; i < shape[1].length; i++)
             shape[1][i] = color;
