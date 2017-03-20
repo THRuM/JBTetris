@@ -1,22 +1,23 @@
 package pl.tetris.blocks;
 
-public class SBlock implements Block {
+public class LBlock implements Block {
 
     private Square shape[][];
     private Square backupShape[][];
 
-    public SBlock(Square color, int size) {
-        shape = new Square[2][size];
+    public LBlock(Square color, int size) {
+        shape = new Square[size][size];
         backupShape = null;
 
         for(int i=0; i < shape.length; i++)
-            for(int j=0; j < shape[i].length; j++)
-                shape[i][j] = Square.BLANK;
-
-        for(int i = 0; i <= shape[0].length/2; i++)
-            shape[0][i] = color;
-        for(int i = shape[1].length/2; i < shape[1].length; i++)
-            shape[1][i] = color;
+            for(int j=0; j < shape[i].length; j++) {
+                if (j >= size - 1)
+                    shape[i][j] = color;
+                else if (i >= size - 1)
+                    shape[i][j] = color;
+                else
+                    shape[i][j] = Square.BLANK;
+            }
     }
 
     @Override

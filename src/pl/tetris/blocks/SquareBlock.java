@@ -3,11 +3,9 @@ package pl.tetris.blocks;
 public class SquareBlock implements Block {
 
     private Square shape[][];
-    private Square backupShape[][];
 
     public SquareBlock(Square color, int size){
         shape = new Square[size][size];
-        backupShape = null;
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++)
@@ -31,7 +29,6 @@ public class SquareBlock implements Block {
 
     @Override
     public void revertMove() {
-        if(backupShape != null)
-            shape = backupShape;
+        //Zbędne
     }
 }
