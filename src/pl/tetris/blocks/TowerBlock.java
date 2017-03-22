@@ -4,6 +4,8 @@ public class TowerBlock implements Block {
 
     private Square shape[][];
     private Square backupShape[][];
+    private int x;
+    private int y;
 
     public TowerBlock(Square color, int height) {
         shape = new Square[height][1];
@@ -39,5 +41,25 @@ public class TowerBlock implements Block {
     public void revertMove() {
         if(backupShape != null)
             shape = backupShape;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
     }
 }

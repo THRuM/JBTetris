@@ -4,10 +4,14 @@ public class LBlock implements Block {
 
     private Square shape[][];
     private Square backupShape[][];
+    private int x;
+    private int y;
 
     public LBlock(Square color, int size) {
         shape = new Square[size][size];
         backupShape = null;
+        x = 0;
+        y = 0;
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++) {
@@ -50,5 +54,25 @@ public class LBlock implements Block {
     public void revertMove() {
         if(backupShape != null)
             shape = backupShape;
+    }
+
+    @Override
+    public void setX(int x){
+        this.x = x;
+    }
+
+    @Override
+    public int getX(){
+        return x;
+    }
+
+    @Override
+    public void setY(int y){
+        this.y = y;
+    }
+
+    @Override
+    public int getY(){
+        return y;
     }
 }

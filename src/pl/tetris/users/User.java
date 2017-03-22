@@ -8,6 +8,11 @@ public class User {
     private char right;
     private char left;
 
+    public User(String name){
+        this.name = name;
+        points = 0;
+    }
+
     public int getPoints() {
         return points;
     }

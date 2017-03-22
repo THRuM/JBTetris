@@ -4,10 +4,14 @@ public class SBlock implements Block {
 
     private Square shape[][];
     private Square backupShape[][];
+    private int x;
+    private int y;
 
     public SBlock(Square color, int size) {
         shape = new Square[2][size];
         backupShape = null;
+        x = 0;
+        y = 0;
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++)
@@ -49,5 +53,25 @@ public class SBlock implements Block {
     public void revertMove() {
         if(backupShape != null)
             shape = backupShape;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
     }
 }

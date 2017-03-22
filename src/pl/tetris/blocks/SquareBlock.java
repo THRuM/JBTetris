@@ -3,6 +3,8 @@ package pl.tetris.blocks;
 public class SquareBlock implements Block {
 
     private Square shape[][];
+    private int x;
+    private int y;
 
     public SquareBlock(Square color, int size){
         shape = new Square[size][size];
@@ -30,5 +32,25 @@ public class SquareBlock implements Block {
     @Override
     public void revertMove() {
         //Zbędne
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
     }
 }

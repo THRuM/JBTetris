@@ -9,11 +9,5 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Plane plane = new Plane(20, 50);
-        Block bb = new SquareBlock(Square.BLUE, 2);
-
-        plane.addBlock(bb);
-
-        System.out.println(plane);
     }
 }
