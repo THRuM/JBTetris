@@ -74,6 +74,26 @@ public class Plane {
         }
     }
 
+    public void rotateBlock(User user, Rotation rotation){
+        Block block = blocks.get(user);
+
+        cleanBlock(block);
+
+        if(rotation == Rotation.RIGHT)
+            block.rotateRight();
+        else
+            block.rotateLeft();
+
+        if(checkSquares(block, block.getX() - block.getShape()[0].length/2, block.getY())) {
+            block.setX(block.getX() - block.getShape()[0].length / 2);
+            drawBlock(block);
+        } else{
+            block.revertMove();
+            drawBlock(block);
+        }
+
+    }
+
     public String toString(){
         StringBuilder rep = new StringBuilder();
         for(Square row[] : squaresArray) {
@@ -139,6 +159,7 @@ public class Plane {
 
         for(int i=0; i < shape.length; i++)
             for(int j=0; j < shape[i].length; j++)
-                squaresArray[block.getY() + i][block.getX() + j] = shape[i][j];
+                if(shape[i][j] != Square.BLANK)
+                    squaresArray[block.getY() + i][block.getX() + j] = shape[i][j];
     }
 }

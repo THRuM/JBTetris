@@ -2,10 +2,7 @@ package pl.tetris.plane;
 
 import org.junit.Before;
 import org.junit.Test;
-import pl.tetris.blocks.Block;
-import pl.tetris.blocks.Square;
-import pl.tetris.blocks.SquareBlock;
-import pl.tetris.blocks.TowerBlock;
+import pl.tetris.blocks.*;
 import pl.tetris.users.User;
 
 import static org.junit.Assert.*;
@@ -91,6 +88,76 @@ public class PlaneTest {
         plane.gameStep();
 
         assertArrayEquals("Failed performing game step for single user - arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void checkMoves() throws Exception {
+        squarePlane[2][4] = expectedColor;
+        squarePlane[2][5] = expectedColor;
+        squarePlane[3][4] = expectedColor;
+        squarePlane[3][5] = expectedColor;
+
+        squarePlane[1][5] = expectedColor2;
+        squarePlane[1][6] = expectedColor2;
+        squarePlane[2][6] = expectedColor2;
+        squarePlane[2][7] = expectedColor2;
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block1 = new SquareBlock(expectedColor, expectedSize);
+        Block block2 = new SBlock(expectedColor2, 3);
+
+        plane.addBlock(user1, block1);
+
+        plane.gameStep();
+        plane.gameStep();
+
+        plane.addBlock(user1, block2);
+
+        plane.moveBlock(user1, Direction.RIGHT);
+
+        plane.gameStep();
+
+        assertArrayEquals("Failed performing blocks pre colision for single user - arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void rotateBlockRight() throws Exception {
+        squarePlane[0][4] = expectedColor;
+        squarePlane[1][4] = expectedColor;
+        squarePlane[1][3] = expectedColor;
+        squarePlane[2][3] = expectedColor;
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block = new SBlock(expectedColor, 3);
+
+        plane.addBlock(user1, block);
+
+        plane.rotateBlock(user1, Rotation.RIGHT);
+
+        assertArrayEquals("Failed rotating block right for single user - arrays not the same", squarePlane, plane.getPlane());
+    }
+
+    @Test
+    public void rotateBlockLeft() throws Exception {
+        squarePlane[0][3] = expectedColor;
+        squarePlane[0][4] = expectedColor;
+        squarePlane[0][5] = expectedColor;
+        squarePlane[0][6] = expectedColor;
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block = new TowerBlock(expectedColor, expectedSize2);
+
+        plane.addBlock(user1, block);
+
+        plane.rotateBlock(user1, Rotation.LEFT);
+
+        assertArrayEquals("Failed rotating block right for single user - arrays not the same", squarePlane, plane.getPlane());
     }
 
     //Tests for multiplayer
