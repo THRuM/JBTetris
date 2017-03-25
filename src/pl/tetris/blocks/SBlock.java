@@ -7,6 +7,10 @@ public class SBlock implements Block {
     private int x;
     private int y;
 
+    public SBlock(Square color) {
+        this(color, 3);
+    }
+
     public SBlock(Square color, int size) {
         shape = new Square[2][size];
         backupShape = null;

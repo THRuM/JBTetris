@@ -7,6 +7,10 @@ public class LBlock implements Block {
     private int x;
     private int y;
 
+    public LBlock(Square color) {
+        this(color, 3);
+    }
+
     public LBlock(Square color, int size) {
         shape = new Square[size][size];
         backupShape = null;

@@ -7,6 +7,10 @@ public class TowerBlock implements Block {
     private int x;
     private int y;
 
+    public TowerBlock(Square color){
+        this(color, 4);
+    }
+
     public TowerBlock(Square color, int height) {
         shape = new Square[height][1];
         backupShape = null;

@@ -6,6 +6,10 @@ public class SquareBlock implements Block {
     private int x;
     private int y;
 
+    public SquareBlock(Square color) {
+        this(color, 2);
+    }
+
     public SquareBlock(Square color, int size){
         shape = new Square[size][size];
 

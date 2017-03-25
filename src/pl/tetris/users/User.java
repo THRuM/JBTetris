@@ -13,6 +13,10 @@ public class User {
         points = 0;
     }
 
+    public void addPoint() {
+        points += 1;
+    }
+
     public int getPoints() {
         return points;
     }

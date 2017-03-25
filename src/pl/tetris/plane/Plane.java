@@ -10,10 +10,12 @@ import java.util.Map;
 public class Plane {
     private Square squaresArray[][];
     private Map<User, Block> blocks;
+    private CollisionDetection collisionDetection;
 
     public Plane(int width, int height){
         squaresArray = new Square[height][width];
         blocks = new LinkedHashMap<>();
+        this.collisionDetection = new SimpleCollisionDetection(squaresArray);
 
         for(int i = 0; i < squaresArray.length; i++)
             for(int j = 0; j < squaresArray[i].length; j++){
@@ -49,29 +51,24 @@ public class Plane {
         else
             newCoordinates = checkCoordinates(block, 0, 0);
 
-        if(checkSquares(block, newCoordinates[0], newCoordinates[1])){
+        cleanBlock(block);
+
+        if(collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])){
             block.setX(newCoordinates[0]);
             block.setY(newCoordinates[1]);
 
+            drawBlock(block);
+        }else if(direction == Direction.DOWN) {
+            drawBlock(block);
+            block = null;
+        }else {
             drawBlock(block);
         }
     }
 
     public void gameStep(){
-        Block block;
-        for(User user : blocks.keySet()) {
-            block = blocks.get(user);
-            if(block != null) {
-                int newCoordinates[] = checkCoordinates(block, 0, 1);
-
-                if (checkSquares(block, newCoordinates[0], newCoordinates[1])) {
-                    block.setX(newCoordinates[0]);
-                    block.setY(newCoordinates[1]);
-
-                    drawBlock(block);
-                }
-            }
-        }
+        for(User user : blocks.keySet())
+            moveBlock(user, Direction.DOWN);
     }
 
     public void rotateBlock(User user, Rotation rotation){
@@ -84,7 +81,7 @@ public class Plane {
         else
             block.rotateLeft();
 
-        if(checkSquares(block, block.getX() - block.getShape()[0].length/2, block.getY())) {
+        if(collisionDetection.checkSquares(block, block.getX() - block.getShape()[0].length/2, block.getY())) {
             block.setX(block.getX() - block.getShape()[0].length / 2);
             drawBlock(block);
         } else{
@@ -131,27 +128,6 @@ public class Plane {
             newCoordinates[1] = squaresArray.length - block.getShape().length;
 
         return newCoordinates;
-    }
-
-    private boolean checkSquares(Block block, int x, int y){
-        boolean movePossible = true;
-        Square shape[][] = block.getShape();
-
-        cleanBlock(block);
-
-        for(int i=0; i < shape.length; i++)
-            for(int j=0; j < shape[i].length; j++){
-                if(shape[i][j] != Square.BLANK)
-                    if(squaresArray[y + i][x + j] != Square.BLANK){
-                        movePossible = false;
-                        break;
-                    }
-            }
-
-        if(!movePossible)
-            drawBlock(block);
-
-        return movePossible;
     }
 
     private void drawBlock(Block block){
