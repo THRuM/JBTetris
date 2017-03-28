@@ -42,14 +42,19 @@ public class Plane {
         Block block = blocks.get(user);
         int newCoordinates[];
 
-        if(direction == Direction.DOWN)
-            newCoordinates = checkCoordinates(block, 0, 1);
-        else if(direction == Direction.LEFT)
-            newCoordinates = checkCoordinates(block, -1, 0);
-        else if(direction == Direction.RIGHT)
-            newCoordinates = checkCoordinates(block, 1, 0);
-        else
-            newCoordinates = checkCoordinates(block, 0, 0);
+        switch (direction) {
+            case DOWN:
+                newCoordinates = checkCoordinates(block, 0, 1);
+                break;
+            case LEFT:
+                newCoordinates = checkCoordinates(block, -1, 0);
+                break;
+            case RIGHT:
+                newCoordinates = checkCoordinates(block, 1, 0);
+                break;
+            default:
+                newCoordinates = checkCoordinates(block, 0, 0);
+        }
 
         cleanBlock(block);
 
