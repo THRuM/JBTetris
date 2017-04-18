@@ -1,7 +1,8 @@
 package pl.tetris.plane;
 
-import pl.tetris.blocks.Block;
-import pl.tetris.blocks.Square;
+import org.junit.Test;
+import pl.tetris.blocks.*;
+import pl.tetris.game.EndGameException;
 import pl.tetris.users.User;
 
 import java.util.LinkedHashMap;
@@ -12,11 +13,13 @@ public class Plane {
     private Square squaresArray[][];
     private Map<User, Block> blocks;
     private CollisionDetection collisionDetection;
+    private BlocksFactory blocksFactory;
 
     public Plane(int width, int height){
         squaresArray = new Square[height][width];
         blocks = new LinkedHashMap<>();
         this.collisionDetection = new SimpleCollisionDetection(squaresArray);
+        this.blocksFactory = new RandomBlockFactory();
 
         for(int i = 0; i < squaresArray.length; i++)
             for(int j = 0; j < squaresArray[i].length; j++){
@@ -32,15 +35,21 @@ public class Plane {
         blocks.put(user, null);
     }
 
-    public void addBlock(User user, Block block){
+    public void addBlock(User user, Block block) throws EndGameException {
         blocks.put(user, block);
         block.setX((squaresArray[0].length / 2) - (block.getShape()[0].length / 2));
         block.setY(0);
         moveBlock(user, Direction.NONE);
     }
 
-    public void moveBlock(User user, Direction direction){
+    public void moveBlock(User user, Direction direction) throws EndGameException {
         Block block = blocks.get(user);
+
+        if(block == null) {
+            addBlock(user, getNewBlock());
+            block = blocks.get(user);
+        }
+
         List<Integer> fullLines;
         int newCoordinates[];
 
@@ -60,13 +69,13 @@ public class Plane {
 
         if(newCoordinates[1] < 0){
             //Poza mapą
-            block = null;
             fullLines = collisionDetection.fullLines();
             int points = cleanLines(fullLines);
             user.addPoints(points);
+            addBlock(user, getNewBlock());
         }else {
-
-            cleanBlock(block);
+            if(direction != Direction.NONE)
+                cleanBlock(block);
 
             if (collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])) {
                 block.setX(newCoordinates[0]);
@@ -75,19 +84,22 @@ public class Plane {
                 drawBlock(block);
 
             } else if (direction == Direction.DOWN) {
+                //W obrębie mapy ale ruch w dół nie możliwy
                 drawBlock(block);
-                block = null;
                 fullLines = collisionDetection.fullLines();
                 int points = cleanLines(fullLines);
                 user.addPoints(points);
+                addBlock(user, getNewBlock());
+            } else if (direction == Direction.NONE) {
+                //Brak miejsca koniec gry
+                throw new EndGameException();
             } else {
                 drawBlock(block);
             }
-
         }
     }
 
-    public void gameStep(){
+    public void gameStep() throws EndGameException {
         for(User user : blocks.keySet())
             moveBlock(user, Direction.DOWN);
     }
@@ -147,6 +159,10 @@ public class Plane {
         squaresArray[0] = blankLine;
     }
 
+    private Block getNewBlock(){
+        return blocksFactory.getBlock();
+    }
+
     private void cleanBlock(Block block){
         Square shape[][] = block.getShape();
 
@@ -163,5 +179,9 @@ public class Plane {
             for(int j=0; j < shape[i].length; j++)
                 if(shape[i][j] != Square.BLANK)
                     squaresArray[block.getY() + i][block.getX() + j] = shape[i][j];
+    }
+
+    public void setBlocksFactory(BlocksFactory blocksFactory){
+        this.blocksFactory = blocksFactory;
     }
 }

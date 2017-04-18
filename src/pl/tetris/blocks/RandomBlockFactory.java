@@ -45,11 +45,18 @@ public class RandomBlockFactory implements BlocksFactory {
     }
 
     @Override
-    public Block getBlock() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public Block getBlock() {
+        Block block;
         Class classOfBlock = listOfBlocks.get(random.nextInt(listOfBlocks.size()));
-        Constructor constructor = classOfBlock.getConstructor(Square.class);
+        try {
+            Constructor constructor = classOfBlock.getConstructor(Square.class);
 
-        return (Block) constructor.newInstance(randomColor());
+            block = (Block) constructor.newInstance(randomColor());
+        } catch (Exception e) {
+            block = new SquareBlock(Square.RED);
+        }
+
+        return block;
     }
 
     @Override
