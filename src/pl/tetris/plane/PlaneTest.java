@@ -285,4 +285,94 @@ public class PlaneTest {
 
         assertArrayEquals("Failed performing game step for multiple users - arrays not the same", squarePlane, plane.getPlane());
     }
+
+    @Test
+    public void cleaningLines() throws Exception {
+        squarePlane[28][2] = expectedColor;
+        squarePlane[29][2] = expectedColor;
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block1 = new LBlock(expectedColor);
+        Block block3 = new TowerBlock(expectedColor2, 7);
+
+        plane.addBlock(user1, block1);
+
+        for(int i=0; i < height-3; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        plane.moveBlock(user1, Direction.LEFT);
+        plane.moveBlock(user1, Direction.LEFT);
+        plane.moveBlock(user1, Direction.LEFT);
+        plane.moveBlock(user1, Direction.LEFT);
+
+        plane.addBlock(user1, block3);
+        plane.moveBlock(user1,Direction.RIGHT);
+        plane.rotateBlock(user1, Rotation.RIGHT);
+
+        for(int i=0; i < height; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        int points = user1.getPoints();
+
+        assertArrayEquals("Failed performing lines cleaning/scoring points - arrays not the same", squarePlane, plane.getPlane());
+
+        assertEquals(1, points);
+    }
+
+    @Test
+    public void cleaningMultipleLines() throws Exception {
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block1 = new SquareBlock(expectedColor);
+        Block block2 = new SquareBlock(expectedColor2);
+        Block block3 = new SquareBlock(expectedColor);
+        Block block4 = new SquareBlock(expectedColor2);
+        Block block5 = new SquareBlock(expectedColor);
+
+        plane.addBlock(user1, block1);
+        plane.moveBlock(user1,Direction.LEFT);
+        plane.moveBlock(user1,Direction.LEFT);
+        plane.moveBlock(user1,Direction.LEFT);
+        plane.moveBlock(user1,Direction.LEFT);
+
+        for(int i=0; i < height - 2; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        plane.addBlock(user1, block2);
+        plane.moveBlock(user1,Direction.LEFT);
+        plane.moveBlock(user1,Direction.LEFT);
+
+        for(int i=0; i < height - 2; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        plane.addBlock(user1, block3);
+        for(int i=0; i < height - 2; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        plane.addBlock(user1, block4);
+        plane.moveBlock(user1, Direction.RIGHT);
+        plane.moveBlock(user1, Direction.RIGHT);
+        for(int i=0; i < height - 2; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        plane.addBlock(user1, block5);
+        plane.moveBlock(user1, Direction.RIGHT);
+        plane.moveBlock(user1, Direction.RIGHT);
+        plane.moveBlock(user1, Direction.RIGHT);
+        plane.moveBlock(user1, Direction.RIGHT);
+
+        for(int i=0; i < height - 1; i++)
+            plane.moveBlock(user1, Direction.DOWN);
+
+        int points = user1.getPoints();
+
+        assertArrayEquals("Failed performing lines cleaning/scoring points - arrays not the same", squarePlane, plane.getPlane());
+
+        assertEquals(2, points);
+
+    }
 }

@@ -32,6 +32,26 @@ public class SimpleCollisionDetection implements CollisionDetection {
     }
 
     @Override
+    public int[] checkCoordinates(Block block, int x, int y){
+        int newCoordinates[] = new int[2];
+        newCoordinates[0] = block.getX() + x;
+        newCoordinates[1] = block.getY() + y;
+
+        if(newCoordinates[0] < 0)
+            newCoordinates[0] = 0;
+        else if(newCoordinates[0] > squaresArray[0].length - block.getShape()[0].length)
+            newCoordinates[0] = squaresArray[0].length - block.getShape()[0].length;
+
+        if(newCoordinates[1] < 0)
+            newCoordinates[1] = 0;
+        else if(newCoordinates[1] > squaresArray.length - block.getShape().length)
+            //newCoordinates[1] = squaresArray.length - block.getShape().length;
+            newCoordinates[1] = -1;
+
+        return newCoordinates;
+    }
+
+    @Override
     public List<Integer> fullLines() {
         List<Integer> fullLines = new ArrayList<>(1);
 

@@ -5,6 +5,7 @@ import pl.tetris.blocks.Square;
 import pl.tetris.users.User;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Plane {
@@ -40,34 +41,49 @@ public class Plane {
 
     public void moveBlock(User user, Direction direction){
         Block block = blocks.get(user);
+        List<Integer> fullLines;
         int newCoordinates[];
 
         switch (direction) {
             case DOWN:
-                newCoordinates = checkCoordinates(block, 0, 1);
+                newCoordinates = collisionDetection.checkCoordinates(block, 0, 1);
                 break;
             case LEFT:
-                newCoordinates = checkCoordinates(block, -1, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, -1, 0);
                 break;
             case RIGHT:
-                newCoordinates = checkCoordinates(block, 1, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, 1, 0);
                 break;
             default:
-                newCoordinates = checkCoordinates(block, 0, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, 0, 0);
         }
 
-        cleanBlock(block);
-
-        if(collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])){
-            block.setX(newCoordinates[0]);
-            block.setY(newCoordinates[1]);
-
-            drawBlock(block);
-        }else if(direction == Direction.DOWN) {
-            drawBlock(block);
+        if(newCoordinates[1] < 0){
+            //Poza mapą
             block = null;
+            fullLines = collisionDetection.fullLines();
+            int points = cleanLines(fullLines);
+            user.addPoints(points);
         }else {
-            drawBlock(block);
+
+            cleanBlock(block);
+
+            if (collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])) {
+                block.setX(newCoordinates[0]);
+                block.setY(newCoordinates[1]);
+
+                drawBlock(block);
+
+            } else if (direction == Direction.DOWN) {
+                drawBlock(block);
+                block = null;
+                fullLines = collisionDetection.fullLines();
+                int points = cleanLines(fullLines);
+                user.addPoints(points);
+            } else {
+                drawBlock(block);
+            }
+
         }
     }
 
@@ -108,6 +124,29 @@ public class Plane {
         return rep.toString();
     }
 
+    private int cleanLines(List<Integer> listOfLinesToClean) {
+        int points = listOfLinesToClean.size();
+
+        for(int i=0; i < squaresArray.length; i++)
+            if(listOfLinesToClean.contains(i))
+                removeLine(i);
+
+        return points;
+    }
+
+    private void removeLine(int lineNumber){
+        Square blankLine[] = new Square[squaresArray[0].length];
+        for(int i=0; i < blankLine.length; i++)
+            blankLine[i] = Square.BLANK;
+
+        for(int i = lineNumber; i >= 1; i--)
+           squaresArray[i] = squaresArray[i-1];
+
+        //System.arraycopy(squaresArray, lineNumber-1, squaresArray, lineNumber, lineNumber);
+
+        squaresArray[0] = blankLine;
+    }
+
     private void cleanBlock(Block block){
         Square shape[][] = block.getShape();
 
@@ -115,24 +154,6 @@ public class Plane {
             for(int j=0; j < shape[i].length; j++)
                 if(shape[i][j] != Square.BLANK)
                     squaresArray[block.getY() + i][block.getX() + j] = Square.BLANK;
-    }
-
-    private int[] checkCoordinates(Block block, int x, int y){
-        int newCoordinates[] = new int[2];
-        newCoordinates[0] = block.getX() + x;
-        newCoordinates[1] = block.getY() + y;
-
-        if(newCoordinates[0] < 0)
-            newCoordinates[0] = 0;
-        else if(newCoordinates[0] > squaresArray[0].length - block.getShape()[0].length)
-            newCoordinates[0] = squaresArray[0].length - block.getShape()[0].length;
-
-        if(newCoordinates[1] < 0)
-            newCoordinates[1] = 0;
-        else if(newCoordinates[1] > squaresArray.length - block.getShape().length)
-            newCoordinates[1] = squaresArray.length - block.getShape().length;
-
-        return newCoordinates;
     }
 
     private void drawBlock(Block block){
