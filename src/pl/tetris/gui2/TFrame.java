@@ -3,6 +3,8 @@ package pl.tetris.gui2;
 /**
  * Created by Łukasz on 09.05.2017.
  */
+import pl.tetris.game.TGame;
+
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,6 +14,8 @@ import javax.swing.JFrame;
 public class TFrame extends JFrame implements KeyListener {
 
         int keyCode = 0;
+
+        TGame tGame;
 
         public TFrame() {
             super("KeyListener Test");
@@ -36,25 +40,14 @@ public class TFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
-
-
             keyCode = e.getKeyCode();
-            switch (keyCode){
-                case KeyEvent.VK_RIGHT:
-                    System.out.println(" Add code to move RIGHT " );
-                    break;
-                case KeyEvent.VK_LEFT:
-                    System.out.println(" Add code to move LEFT " );
-                    break;
-                case KeyEvent.VK_UP:
-                    System.out.println(" Add code to ROTATE " );
-                    break;
-                case KeyEvent.VK_DOWN:
-                    System.out.println(" Add code to move DOWN " );
-                    break;
             }
-    }
 
+    public void settGame(TGame tGame) {
+        this.tGame = tGame;
     }
+}
+
+
+
 
