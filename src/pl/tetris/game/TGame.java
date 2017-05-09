@@ -7,14 +7,14 @@ import javax.swing.Timer;
 import java.awt.event.ActionListener;
 
 
-public class TGame {
+public class TGame {/*
     User placeholder1 = new User(toString());
     User placeholder2 = new User(toString());
 
 
     public int level = 2000;
 
-    Timer GTime = new Timer(level, ActionListener.gameStep() );
+//    Timer GTime = new Timer(level, ActionListener.gameStep() );
 
 
     public static void StartGame{
@@ -35,5 +35,5 @@ public class TGame {
 
     }
 
-
+*/
 }
