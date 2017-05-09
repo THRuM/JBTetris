@@ -9,6 +9,7 @@ import pl.tetris.plane.Plane;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.EventQueue;
 
 public class Main {
 

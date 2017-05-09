@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 /**
  * Created by Tomasz on 05.05.2017.
  */
-public class TetrisPanel extends JPanel implements KeyListener{
+public class TetrisPanel extends JPanel {
     private int width;
     private int height;
     private JButton squares[][];
@@ -39,20 +39,5 @@ public class TetrisPanel extends JPanel implements KeyListener{
                 super.add(button);
             }
         }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        System.out.println(e.getKeyChar());
     }
 }
