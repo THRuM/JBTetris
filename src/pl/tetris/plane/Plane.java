@@ -1,21 +1,25 @@
 package pl.tetris.plane;
 
-import pl.tetris.blocks.Block;
-import pl.tetris.blocks.Square;
+import org.junit.Test;
+import pl.tetris.blocks.*;
+import pl.tetris.game.EndGameException;
 import pl.tetris.users.User;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Plane {
     private Square squaresArray[][];
     private Map<User, Block> blocks;
     private CollisionDetection collisionDetection;
+    private BlocksFactory blocksFactory;
 
     public Plane(int width, int height){
         squaresArray = new Square[height][width];
         blocks = new LinkedHashMap<>();
         this.collisionDetection = new SimpleCollisionDetection(squaresArray);
+        this.blocksFactory = new RandomBlockFactory();
 
         for(int i = 0; i < squaresArray.length; i++)
             for(int j = 0; j < squaresArray[i].length; j++){
@@ -31,47 +35,71 @@ public class Plane {
         blocks.put(user, null);
     }
 
-    public void addBlock(User user, Block block){
+    public void addBlock(User user, Block block) throws EndGameException {
         blocks.put(user, block);
         block.setX((squaresArray[0].length / 2) - (block.getShape()[0].length / 2));
         block.setY(0);
         moveBlock(user, Direction.NONE);
     }
 
-    public void moveBlock(User user, Direction direction){
+    public void moveBlock(User user, Direction direction) throws EndGameException {
         Block block = blocks.get(user);
+
+        if(block == null) {
+            addBlock(user, getNewBlock());
+            block = blocks.get(user);
+        }
+
+        List<Integer> fullLines;
         int newCoordinates[];
 
         switch (direction) {
             case DOWN:
-                newCoordinates = checkCoordinates(block, 0, 1);
+                newCoordinates = collisionDetection.checkCoordinates(block, 0, 1);
                 break;
             case LEFT:
-                newCoordinates = checkCoordinates(block, -1, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, -1, 0);
                 break;
             case RIGHT:
-                newCoordinates = checkCoordinates(block, 1, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, 1, 0);
                 break;
             default:
-                newCoordinates = checkCoordinates(block, 0, 0);
+                newCoordinates = collisionDetection.checkCoordinates(block, 0, 0);
         }
 
-        cleanBlock(block);
-
-        if(collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])){
-            block.setX(newCoordinates[0]);
-            block.setY(newCoordinates[1]);
-
-            drawBlock(block);
-        }else if(direction == Direction.DOWN) {
-            drawBlock(block);
-            block = null;
+        if(newCoordinates[1] < 0){
+            //Poza mapą
+            fullLines = collisionDetection.fullLines();
+            int points = cleanLines(fullLines);
+            user.addPoints(points);
+            addBlock(user, getNewBlock());
         }else {
-            drawBlock(block);
+            if(direction != Direction.NONE)
+                cleanBlock(block);
+
+            if (collisionDetection.checkSquares(block, newCoordinates[0], newCoordinates[1])) {
+                block.setX(newCoordinates[0]);
+                block.setY(newCoordinates[1]);
+
+                drawBlock(block);
+
+            } else if (direction == Direction.DOWN) {
+                //W obrębie mapy ale ruch w dół nie możliwy
+                drawBlock(block);
+                fullLines = collisionDetection.fullLines();
+                int points = cleanLines(fullLines);
+                user.addPoints(points);
+                addBlock(user, getNewBlock());
+            } else if (direction == Direction.NONE) {
+                //Brak miejsca koniec gry
+                throw new EndGameException();
+            } else {
+                drawBlock(block);
+            }
         }
     }
 
-    public void gameStep(){
+    public void gameStep() throws EndGameException {
         for(User user : blocks.keySet())
             moveBlock(user, Direction.DOWN);
     }
@@ -108,6 +136,33 @@ public class Plane {
         return rep.toString();
     }
 
+    private int cleanLines(List<Integer> listOfLinesToClean) {
+        int points = listOfLinesToClean.size();
+
+        for(int i=0; i < squaresArray.length; i++)
+            if(listOfLinesToClean.contains(i))
+                removeLine(i);
+
+        return points;
+    }
+
+    private void removeLine(int lineNumber){
+        Square blankLine[] = new Square[squaresArray[0].length];
+        for(int i=0; i < blankLine.length; i++)
+            blankLine[i] = Square.BLANK;
+
+        for(int i = lineNumber; i >= 1; i--)
+           squaresArray[i] = squaresArray[i-1];
+
+        //System.arraycopy(squaresArray, lineNumber-1, squaresArray, lineNumber, lineNumber);
+
+        squaresArray[0] = blankLine;
+    }
+
+    private Block getNewBlock(){
+        return blocksFactory.getBlock();
+    }
+
     private void cleanBlock(Block block){
         Square shape[][] = block.getShape();
 
@@ -117,24 +172,6 @@ public class Plane {
                     squaresArray[block.getY() + i][block.getX() + j] = Square.BLANK;
     }
 
-    private int[] checkCoordinates(Block block, int x, int y){
-        int newCoordinates[] = new int[2];
-        newCoordinates[0] = block.getX() + x;
-        newCoordinates[1] = block.getY() + y;
-
-        if(newCoordinates[0] < 0)
-            newCoordinates[0] = 0;
-        else if(newCoordinates[0] > squaresArray[0].length - block.getShape()[0].length)
-            newCoordinates[0] = squaresArray[0].length - block.getShape()[0].length;
-
-        if(newCoordinates[1] < 0)
-            newCoordinates[1] = 0;
-        else if(newCoordinates[1] > squaresArray.length - block.getShape().length)
-            newCoordinates[1] = squaresArray.length - block.getShape().length;
-
-        return newCoordinates;
-    }
-
     private void drawBlock(Block block){
         Square shape[][] = block.getShape();
 
@@ -142,5 +179,9 @@ public class Plane {
             for(int j=0; j < shape[i].length; j++)
                 if(shape[i][j] != Square.BLANK)
                     squaresArray[block.getY() + i][block.getX() + j] = shape[i][j];
+    }
+
+    public void setBlocksFactory(BlocksFactory blocksFactory){
+        this.blocksFactory = blocksFactory;
     }
 }

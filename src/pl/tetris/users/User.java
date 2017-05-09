@@ -17,6 +17,8 @@ public class User {
         points += 1;
     }
 
+    public void addPoints(int points) { this.points += points; }
+
     public int getPoints() {
         return points;
     }
