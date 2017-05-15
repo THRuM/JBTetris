@@ -1,9 +1,7 @@
-package pl.tetris.gui2;
+package pl.tetris.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Created by Tomasz on 05.05.2017.

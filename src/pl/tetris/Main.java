@@ -1,14 +1,7 @@
 package pl.tetris;
 
-import pl.tetris.blocks.Block;
-import pl.tetris.blocks.Square;
-import pl.tetris.blocks.SquareBlock;
-import pl.tetris.gui2.TFrame;
-import pl.tetris.gui2.TetrisPanel;
-import pl.tetris.plane.Plane;
+import pl.tetris.gui.TFrame;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.EventQueue;
 
 public class Main {

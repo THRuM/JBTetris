@@ -1,4 +1,4 @@
-package pl.tetris.gui2;
+package pl.tetris.gui;
 
 /**
  * Created by Łukasz on 09.05.2017.
