@@ -62,7 +62,7 @@ public class LBlock implements Block {
 
     @Override
     public void setX(int x){
-        this.x = x;
+        if(x >= 0) this.x = x;
     }
 
     @Override
@@ -72,7 +72,8 @@ public class LBlock implements Block {
 
     @Override
     public void setY(int y){
-        this.y = y;
+
+        if(y >= 0) this.y = y;
     }
 
     @Override

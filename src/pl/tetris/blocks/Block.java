@@ -10,6 +10,24 @@ public interface Block {
     //Przywraca poprzedni stan klocka
     void revertMove();
 
+    default boolean isPointInBlock(int y, int x) {
+        int localX = x - this.getX();
+        int localY = y - this.getY();
+
+        Square shape[][] = this.getShape();
+
+        if(localY >= shape.length || localY < 0)
+            return false;
+
+        if(localX >= shape[0].length || localX < 0)
+            return false;
+
+        if(shape[localY][localX] != Square.BLANK)
+            return true;
+
+        return false;
+    }
+
     int getX();
     void setX(int x);
     int getY();

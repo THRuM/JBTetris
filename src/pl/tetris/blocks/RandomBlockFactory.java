@@ -41,7 +41,7 @@ public class RandomBlockFactory implements BlocksFactory {
 
     private Square randomColor(){
         Square[] colors = Square.values();
-        return colors[random.nextInt(colors.length)];
+        return colors[random.nextInt(colors.length-1)+1];
     }
 
     @Override
