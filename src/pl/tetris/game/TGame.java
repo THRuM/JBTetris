@@ -1,6 +1,5 @@
 package pl.tetris.game;
-// by Tomasz Baran sdsadsa
-import javafx.scene.input.KeyCode;
+// Tomasz Baran
 import pl.tetris.plane.Direction;
 import pl.tetris.plane.Plane;
 import pl.tetris.plane.Rotation;
@@ -8,8 +7,6 @@ import pl.tetris.users.User;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
-import javax.swing.Timer;
-import java.awt.event.ActionListener;
 
 public class TGame extends Thread{
 
@@ -38,27 +35,31 @@ public class TGame extends Thread{
         timeTick = 500;
 
         if(gameMode == 1 || gameMode == 2){
-            user1 = new User("Gracz 1");
+            if(gameMode == 2)
+                user1 = new User("Gracz 1", (planeSize[0]/4)*1);
+
+            if(gameMode == 1)
+                user1 = new User("Gracz 1", (planeSize[0]/2));
             user2 = null;
 
             plane.addUser(user1);
 
             //Standardowe mapowania kierunków i userów
             //User1
-            keyToUserHashMap.put(KeyEvent.VK_UP, user1);
-            keyToUserHashMap.put(KeyEvent.VK_DOWN, user1);
-            keyToUserHashMap.put(KeyEvent.VK_RIGHT, user1);
-            keyToUserHashMap.put(KeyEvent.VK_LEFT, user1);
+            keyToUserHashMap.put(KeyEvent.VK_W, user1);
+            keyToUserHashMap.put(KeyEvent.VK_A, user1);
+            keyToUserHashMap.put(KeyEvent.VK_S, user1);
+            keyToUserHashMap.put(KeyEvent.VK_D, user1);
 
-            keyToDirectionHashMap.put(KeyEvent.VK_UP, Direction.NONE );
-            keyToDirectionHashMap.put(KeyEvent.VK_DOWN, Direction.DOWN );
-            keyToDirectionHashMap.put(KeyEvent.VK_RIGHT, Direction.RIGHT );
-            keyToDirectionHashMap.put(KeyEvent.VK_LEFT, Direction.LEFT);
+            keyToDirectionHashMap.put(KeyEvent.VK_W, Direction.NONE );
+            keyToDirectionHashMap.put(KeyEvent.VK_S, Direction.DOWN );
+            keyToDirectionHashMap.put(KeyEvent.VK_D, Direction.RIGHT );
+            keyToDirectionHashMap.put(KeyEvent.VK_A, Direction.LEFT);
 
         }
 
         if(gameMode == 2) {
-            user2 = new User("Gracz 2");
+            user2 = new User("Gracz 2", (planeSize[0]/4)*3);
 
             plane.addUser(user2);
 
@@ -67,10 +68,10 @@ public class TGame extends Thread{
             keyToUserHashMap.put(KeyEvent.VK_RIGHT, user2);
             keyToUserHashMap.put(KeyEvent.VK_LEFT, user2);
 
-            keyToDirectionHashMap.put(KeyEvent.VK_W, Direction.NONE );
-            keyToDirectionHashMap.put(KeyEvent.VK_S, Direction.DOWN );
-            keyToDirectionHashMap.put(KeyEvent.VK_D, Direction.RIGHT );
-            keyToDirectionHashMap.put(KeyEvent.VK_A, Direction.LEFT);
+            keyToDirectionHashMap.put(KeyEvent.VK_UP, Direction.NONE );
+            keyToDirectionHashMap.put(KeyEvent.VK_DOWN, Direction.DOWN );
+            keyToDirectionHashMap.put(KeyEvent.VK_RIGHT, Direction.RIGHT );
+            keyToDirectionHashMap.put(KeyEvent.VK_LEFT, Direction.LEFT);
         }
     }
 
@@ -116,6 +117,9 @@ public class TGame extends Thread{
         if(isGameRunning){
             User activeUser = keyToUserHashMap.get(keyCode);
             Direction direction = keyToDirectionHashMap.get(keyCode);
+
+            if(activeUser == null || direction == null)
+                return;
 
             if (direction == Direction.NONE){
                 plane.rotateBlock(activeUser, Rotation.RIGHT);
