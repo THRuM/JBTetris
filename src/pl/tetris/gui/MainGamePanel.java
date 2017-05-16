@@ -2,6 +2,7 @@ package pl.tetris.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import pl.tetris.game.TGame;
 
 /**
  * Created by Łukasz on 15.05.2017.
