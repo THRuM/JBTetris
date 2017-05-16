@@ -4,35 +4,62 @@ import pl.tetris.blocks.Block;
 import pl.tetris.blocks.Square;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SimpleCollisionDetection implements CollisionDetection {
 
     private Square squaresArray[][];
+    private Collection<Block> blocks;
+
+    @Override
+    public void setBlocks(Collection<Block> blocks) {
+        this.blocks = blocks;
+    }
 
     public SimpleCollisionDetection(Square array[][]){
         this.squaresArray = array;
     }
 
     @Override
-    public boolean checkSquares(Block block, int x, int y) {
-        boolean movePossible = true;
+    public synchronized int checkSquares(Block block, int x, int y) {
+        //0 - False, 1 - True, 2 - FalseLock
+        int movePossible = 1;
         Square shape[][] = block.getShape();
+
+        if(!isBlockOnPlane(block))
+            return 0;
 
         for (int i = 0; i < shape.length; i++)
             for (int j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] != Square.BLANK)
                     if (squaresArray[y + i][x + j] != Square.BLANK) {
-                        movePossible = false;
-                        break;
+                        if(isPointOnActiveBlock(block,(y+i),(x+j))){
+                            movePossible = 2;
+                            break;
+                        } else {
+                            movePossible = 0;
+                            break;
+                        }
                     }
             }
 
         return movePossible;
     }
 
+    private synchronized boolean isPointOnActiveBlock(Block localBlock, int x, int y){
+        for(Block block : blocks){
+            if(block != localBlock)
+                if(block.isPointInBlock(x, y)){
+                    return true;
+                }
+        }
+        return false;
+    }
+
     @Override
     public int[] checkCoordinates(Block block, int x, int y){
+
         int newCoordinates[] = new int[2];
         newCoordinates[0] = block.getX() + x;
         newCoordinates[1] = block.getY() + y;
@@ -52,7 +79,7 @@ public class SimpleCollisionDetection implements CollisionDetection {
     }
 
     @Override
-    public List<Integer> fullLines() {
+    public synchronized List<Integer> fullLines() {
         List<Integer> fullLines = new ArrayList<>(1);
 
         boolean lineFull = true;
@@ -68,5 +95,23 @@ public class SimpleCollisionDetection implements CollisionDetection {
         }
 
         return fullLines;
+    }
+
+    @Override
+    public synchronized boolean isBlockOnPlane(Block block){
+        boolean blockOnPlane = true;
+        Square shape[][] = block.getShape();
+
+
+        for(int i=0; i<shape.length; i++)
+            for(int j=0; j < shape[i].length; j++){
+                if((block.getY()+i) > (squaresArray.length-1))
+                    blockOnPlane = false;
+
+                if((block.getX() + j) > (squaresArray[0].length-1))
+                    blockOnPlane = false;
+            }
+
+        return blockOnPlane;
     }
 }

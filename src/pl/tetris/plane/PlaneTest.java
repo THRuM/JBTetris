@@ -27,8 +27,8 @@ public class PlaneTest {
             for(int j = 0; j < squarePlane[i].length; j++)
                 squarePlane[i][j] = Square.BLANK;
 
-        user1 = new User("User1");
-        user2 = new User("User2");
+        user1 = new User("User1", (squarePlane[0].length/4)*1);
+        user2 = new User("User2", (squarePlane[0].length/4)*3);
     }
 
     //Tests for single user
@@ -48,6 +48,31 @@ public class PlaneTest {
         plane.addBlock(user1, block);
 
         assertArrayEquals("Failed adding block for single user - arrays not the same", squarePlane, plane.getPlane());
+
+    }
+
+    @Test
+    public void rotBlock() throws Exception {
+
+        squarePlane[2][4] = expectedColor;
+        squarePlane[2][5] = expectedColor;
+        squarePlane[3][4] = expectedColor;
+        squarePlane[3][5] = expectedColor;
+
+        Plane plane = new Plane(width, height);
+        plane.addUser(user1);
+
+        Block block = new SquareBlock(expectedColor, expectedSize);
+
+        plane.addBlock(user1, block);
+        plane.gameStep();
+        plane.gameStep();
+
+        plane.rotateBlock(user1, Rotation.RIGHT);
+
+        plane.rotateBlock(user1, Rotation.LEFT);
+
+        assertArrayEquals("Failed rotating block for single user - arrays not the same", squarePlane, plane.getPlane());
 
     }
 
@@ -125,10 +150,10 @@ public class PlaneTest {
 
     @Test
     public void rotateBlockRight() throws Exception {
-        squarePlane[0][4] = expectedColor;
+        squarePlane[0][5] = expectedColor;
+        squarePlane[1][5] = expectedColor;
         squarePlane[1][4] = expectedColor;
-        squarePlane[1][3] = expectedColor;
-        squarePlane[2][3] = expectedColor;
+        squarePlane[2][4] = expectedColor;
 
         Plane plane = new Plane(width, height);
         plane.addUser(user1);
@@ -144,10 +169,10 @@ public class PlaneTest {
 
     @Test
     public void rotateBlockLeft() throws Exception {
-        squarePlane[0][3] = expectedColor;
-        squarePlane[0][4] = expectedColor;
         squarePlane[0][5] = expectedColor;
         squarePlane[0][6] = expectedColor;
+        squarePlane[0][7] = expectedColor;
+        squarePlane[0][8] = expectedColor;
 
         Plane plane = new Plane(width, height);
         plane.addUser(user1);

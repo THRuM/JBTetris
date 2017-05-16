@@ -40,13 +40,17 @@ public class SimpleCollisionDetectionTest {
 
         CollisionDetection collisionDetection = new SimpleCollisionDetection(this.squarePlane);
 
-        boolean result = collisionDetection.checkSquares(block,3,1);
+        int result = collisionDetection.checkSquares(block,3,1);
 
-        assertFalse("Returned result different then expected",result);
+//        assertFalse("Returned result different then expected",result);
+
+        assertEquals("Returned result different then expected", 0, result);
 
         result = collisionDetection.checkSquares(block,2,1);
 
-        assertTrue("Returned result different then expected",result);
+//        assertTrue("Returned result different then expected",result);
+
+        assertEquals("Returned result different then expected", 1, result);
     }
 
     @Test
