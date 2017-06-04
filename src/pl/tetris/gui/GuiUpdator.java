@@ -23,7 +23,7 @@ public class GuiUpdator extends Thread {
             tetrisPanel.refillSquares();
             headPanel.updateScore();
             try {
-                Thread.sleep(33);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

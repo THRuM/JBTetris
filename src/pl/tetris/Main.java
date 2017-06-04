@@ -9,7 +9,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TGame game = new TGame(1);
+        TGame game = new TGame(2);
+
+
 
         EventQueue.invokeLater(new Runnable() {
             @Override

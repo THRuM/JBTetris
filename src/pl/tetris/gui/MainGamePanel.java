@@ -1,5 +1,7 @@
 package pl.tetris.gui;
 
+import pl.tetris.game.TGame;
+
 import javax.swing.*;
 import java.awt.*;
 import pl.tetris.game.TGame;

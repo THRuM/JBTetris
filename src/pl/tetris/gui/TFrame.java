@@ -18,10 +18,11 @@ public class TFrame extends JFrame implements KeyListener {
     public TFrame(TGame tGame) {
         super("Tetris");
         this.tGame = tGame;
-        MainGamePanel mainGamePanel = new MainGamePanel(tGame);
-
+        //MainGamePanel mainGamePanel = new MainGamePanel(tGame);
+        Menu menu = new Menu(tGame);
+        //MenuGui menuGui = new MenuGui();
         setPreferredSize(new Dimension(400, 700));
-        setContentPane(mainGamePanel);
+        setContentPane(menu);
         addKeyListener(this);
         pack();
         setVisible(true);
