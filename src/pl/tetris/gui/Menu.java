@@ -1,7 +1,6 @@
 package pl.tetris.gui;
 
 import pl.tetris.game.TGame;
-import pl.tetris.users.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,18 +9,17 @@ import java.awt.event.ActionListener;
 
 public class Menu extends JPanel  {
 
-
     private JButton singleplayer;
     private JButton multiplayer;
     private JButton quit;
+    private TGame tGame;
+    private RootPanel rootPanel;
 
 
-    public Menu(TGame tGame){
+    public Menu(RootPanel rootPanel){
         super(new GridBagLayout());
 
-
-
-
+        this.rootPanel = rootPanel;
 
         singleplayer = new JButton("Single Player");
         multiplayer = new JButton("MultiPlayer");
@@ -35,14 +33,20 @@ public class Menu extends JPanel  {
         singleplayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TGame game = new TGame(1);
+                tGame = new TGame(1);
+                rootPanel.gettFrame().settGame(tGame);
+                rootPanel.addGamePanel(new MainGamePanel(tGame, rootPanel));
+                rootPanel.changePanel("GAME");
             }
         });
 
         multiplayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TGame game = new TGame(2);
+                tGame = new TGame(2);
+                rootPanel.gettFrame().settGame(tGame);
+                rootPanel.addGamePanel(new MainGamePanel(tGame, rootPanel));
+                rootPanel.changePanel("GAME");
             }
         });
         quit.addActionListener(new ActionListener() {
@@ -51,10 +55,9 @@ public class Menu extends JPanel  {
                 System.exit(0);
             }
         });
-
-
-
     }
+
+
 
 
 }

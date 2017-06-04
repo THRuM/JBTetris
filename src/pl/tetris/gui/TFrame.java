@@ -13,20 +13,19 @@ import javax.swing.JFrame;
 
 public class TFrame extends JFrame implements KeyListener {
 
-    TGame tGame;
+    private TGame tGame;
 
-    public TFrame(TGame tGame) {
+    public TFrame() {
         super("Tetris");
-        this.tGame = tGame;
-        //MainGamePanel mainGamePanel = new MainGamePanel(tGame);
-        Menu menu = new Menu(tGame);
-        //MenuGui menuGui = new MenuGui();
+        RootPanel rootPanel = new RootPanel();
+        setContentPane(rootPanel);
+        rootPanel.settFrame(this);
         setPreferredSize(new Dimension(400, 700));
-        setContentPane(menu);
         addKeyListener(this);
         pack();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        requestFocus();
     }
 
     @Override
@@ -36,14 +35,16 @@ public class TFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        tGame.keyPressed(e.getKeyCode());
+        if(tGame != null)
+            tGame.keyPressed(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
     }
+
+    public void settGame(TGame tGame) {
+        this.tGame = tGame;
+    }
+
 }
-
-
-
-

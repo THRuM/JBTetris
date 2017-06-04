@@ -11,11 +11,11 @@ import pl.tetris.game.TGame;
  */
 public class MainGamePanel extends JPanel{
 
-    TetrisPanel tetrisPanel;
-    HeadPanel headPanel;
-    TGame tGame;
+    private TetrisPanel tetrisPanel;
+    private HeadPanel headPanel;
+    private TGame tGame;
 
-    public MainGamePanel(TGame tGame){
+    public MainGamePanel(TGame tGame, RootPanel rootPanel){
         super(new BorderLayout());
         this.tGame = tGame;
         tetrisPanel = new TetrisPanel(tGame.getPlaneSize()[0],tGame.getPlaneSize()[1]);
@@ -27,7 +27,7 @@ public class MainGamePanel extends JPanel{
         add(headPanel, BorderLayout.PAGE_START);
 
 
-        new GuiUpdator(tetrisPanel, headPanel, tGame);
+        new GuiUpdator(tetrisPanel, headPanel, tGame, rootPanel);
         this.tGame.start();
     }
 }

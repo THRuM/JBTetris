@@ -1,5 +1,5 @@
 package pl.tetris.game;
-// Tomasz Baran
+
 import pl.tetris.plane.Direction;
 import pl.tetris.plane.Plane;
 import pl.tetris.plane.Rotation;
@@ -79,12 +79,11 @@ public class TGame extends Thread{
     public void run() {
         do{
             try {
-                System.out.println("Wątek TGame");
                 plane.gameStep();
                 Thread.sleep(timeTick);
             } catch (EndGameException | InterruptedException e) {
                 isGameRunning = false;
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         } while (isGameRunning);
     }
@@ -129,7 +128,7 @@ public class TGame extends Thread{
                     plane.moveBlock(activeUser, direction);
                 } catch (EndGameException e) {
                     isGameRunning = false;
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }

@@ -34,7 +34,7 @@ public class TetrisPanel extends JPanel {
     public void refillSquares(){
         Square squareArray[][] = plane.getPlane();
         Square singleSqare;
-        System.out.println("Wątek TetrisPanel");
+//        System.out.println("Wątek TetrisPanel");
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[i].length; j++) {
                 singleSqare = squareArray[i][j];

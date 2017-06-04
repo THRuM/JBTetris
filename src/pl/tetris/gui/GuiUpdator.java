@@ -8,12 +8,14 @@ public class GuiUpdator extends Thread {
     private TetrisPanel tetrisPanel;
     private HeadPanel headPanel;
     private TGame tGame;
+    private RootPanel rootPanel;
 
-    public GuiUpdator(TetrisPanel tetrisPanel, HeadPanel headPanel, TGame tGame) {
+    public GuiUpdator(TetrisPanel tetrisPanel, HeadPanel headPanel, TGame tGame, RootPanel rootPanel) {
         super("GuiUpdator");
         this.tetrisPanel = tetrisPanel;
         this.headPanel = headPanel;
         this.tGame = tGame;
+        this.rootPanel = rootPanel;
         start();
     }
 
@@ -28,5 +30,13 @@ public class GuiUpdator extends Thread {
                 e.printStackTrace();
             }
         } while (tGame.isGameRunning());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        rootPanel.changePanel("MENU");
     }
 }
